@@ -11,22 +11,22 @@ def plot_matrix(middle_matrix, X_matrix, Y_matrix, name_1, name_2):
     X = list(set(np.partition(X_matrix.flatten(), 1)))[1]
     Y = list(set(np.partition(Y_matrix.flatten(), 1)))[1]
     min_range = min(M,X,Y)
-    plt.subplot(1,3,1)
+    plt.subplot(1,4,1)
     plt.imshow(X_matrix, vmin = min_range)
     plt.xlabel("structure 1")
     plt.ylabel("structure 2")
     plt.title("X Matrix")
-    plt.subplot(1,3,2)
+    plt.subplot(1,4,2)
     plt.imshow(middle_matrix, vmin = min_range)
     plt.xlabel("structure 1")
     plt.ylabel("structure 2")
     plt.title("M Matrix")
-    plt.subplot(1,3,3)
+    plt.subplot(1,4,3)
     plt.imshow(Y_matrix, vmin = min_range)
     plt.xlabel("structure 1")
     plt.ylabel("structure 2")
     plt.title("Y Matrix")
-    plt.colorbar()
+    plt.colorbar(shrink=.3)
     plt.tight_layout()
     plt.savefig(name_1 + "_" + name_2 + "_alignment_matrices.pdf")
     plt.clf()
@@ -86,8 +86,10 @@ def get_align_results(file_pairs):
                     print("Incorrect file type used, try dbn or st instead")
             str_1, db_1 = get_struct_info(file_1) 
             str_2, db_2 = get_struct_info(file_2)
-            align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_1, str_2, db_1, db_2, w)
-            
+            if len(db_1) >= len(db_2):
+                align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_1, str_2, db_1, db_2, w)
+            elif len(db_2) > len(db_1):
+                align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_2, str_1, db_2, db_1, w)
             if plot_matrices == True:
                 plot_matrix(middle_matrix, X_matrix, Y_matrix, name_1, name_2)
             
