@@ -1,6 +1,7 @@
 import numpy as np
 import math
 
+#Generate updated ss array
 def edit_ss_array(ss, dotbracket):
     ss_edit = ''
     right_symbols = [")", "]", ">", "}"]
@@ -23,19 +24,15 @@ def create_matrix(rows, cols, k, ss_1, ss_2, gap, extend):
     Y_matrix = np.ones((rows, cols))*-1000000
     count = -1
     for i in range(1, k+1):
-        middle_matrix[i, 0] = float('-1000000')
         middle_matrix_direction[i,0] = 'y'
         X_matrix_direction[i,0] = 'y'
         Y_matrix_direction[i,0] = 'y'
         X_matrix[i,0] = gap + (i-1)*extend
-        Y_matrix[i,0] = float('-1000000')
     for j in range(1, k+1):
-        middle_matrix[0, j] = float('-1000000') 
         middle_matrix_direction[0,j] = 'x'
         X_matrix_direction[0,j] = 'x'
         Y_matrix_direction[0,j] = 'x'
         Y_matrix[0,j] = gap + (j-1)*extend
-        X_matrix[0,j] = float('-1000000')
     for j in range(1, cols):
         for d in range(-k, k+1):
             i = int(math.ceil(((float(rows)-1)/(cols-1))*j + d))
@@ -215,10 +212,7 @@ def score_alignment(ss_1, ss_2, db_1, db_2, k):
     middle_matrix, X_matrix, Y_matrix, middle_matrix_direction, X_matrix_direction, Y_matrix_direction, max_matrix, final_score  = create_matrix(rows, cols, k, ss_1, ss_2, gap, extend)
     aligned_ss_1, aligned_ss_2  = traceback(middle_matrix, X_matrix, Y_matrix, middle_matrix_direction, X_matrix_direction, Y_matrix_direction, max_matrix, rows, cols, ss_1, ss_2)
     dist = get_dist(aligned_ss_1, aligned_ss_2)
-    if full_matrices == 'yes':
-        return aligned_ss_1, aligned_ss_2, dist, final_score, X_matrix, Y_matrix, middle_matrix
-    else:
-        return aligned_ss_1, aligned_ss_2, dist, final_score
+    return aligned_ss_1, aligned_ss_2, dist, final_score, X_matrix, Y_matrix, middle_matrix
 
 def generate_gap_score(i, j, direction, ss_1, ss_2):
     if direction == "up":
@@ -305,7 +299,6 @@ def inside_band(i,j,rows, cols, k):
 ########
 gap = -3
 extend = -6
-full_matrices = 'yes'
 
 ##GAP_PENALTIES##
 gap_score_dictionary = {('-','M'): -3.1, ('-','I'):-3.2 , ('-','R'): -3.3, ('-','L'): -3.3, ('-','B'): -3.3, ('-','E'): -2.5,('-','X'): -1.6,('-','H'): -.5} 
