@@ -1,5 +1,7 @@
 import numpy as np
 import math
+import sys
+np.set_printoptions(threshold=sys.maxsize)
 
 #Generate updated ss array
 def edit_ss_array(ss, dotbracket):
@@ -118,33 +120,28 @@ def traceback(middle_matrix, X_matrix, Y_matrix, middle_matrix_direction, X_matr
         direction = Y_matrix_direction[i][j]
     elif max_matrix == "x":
         direction = X_matrix_direction[i][j]
-    mid_x = []
-    mid_y = []
-    up_x = []
-    up_y = []
-    left_y = []
-    left_x = []
     current_matrix = max_matrix
     while not (i==0 and j == 0):
-        if current_matrix == "m":
-            mid_x.append(j)
-            mid_y.append(i)
+        if i == 0 and j > 0:
+            aligned_seq1 = '-' + aligned_seq1
+            aligned_seq2 = ss_2[j-1] + aligned_seq2
+        elif j == 0 and i > 0:
+            aligned_seq1 = ss_1[i-1] + aligned_seq1
+            aligned_seq2 = '-' + aligned_seq2
+        elif current_matrix == "m":
             aligned_seq1 = ss_1[i-1] + aligned_seq1
             aligned_seq2 = ss_2[j-1] + aligned_seq2
         elif current_matrix == 'y':
-            up_x.append(j)
-            up_y.append(i)
             aligned_seq1 = ss_1[i-1] + aligned_seq1
             aligned_seq2 = '-' + aligned_seq2
         elif current_matrix == 'x':
-            left_x.append(j)
-            left_y.append(i)
             aligned_seq1 = '-' + aligned_seq1
             aligned_seq2 = ss_2[j-1] + aligned_seq2
         else:
             print ('Error:')
             break
         current_matrix, direction, i, j = next_move(middle_matrix_direction, X_matrix_direction, Y_matrix_direction, current_matrix, direction, i, j)
+    
     return aligned_seq1, aligned_seq2
 
 def get_dist(alignment_1, alignment_2):
@@ -158,22 +155,18 @@ def get_dist(alignment_1, alignment_2):
     return dist
 
 def next_move (middle_matrix, X_matrix, Y_matrix, current_matrix, direction, i, j):
-    if j == 1 and i > 1:
+    if j == 0 and i > 0:
         current_matrix = "y"
         direction = "y"
         i = i -1
         j = j
         direction = "y"
-    elif i == 1 and j > 1:
+    elif i == 0 and j > 0:
         current_matrix = "x"
         direction = "x"
         i = i
         j = j -1
-    elif i == 1 and j == 1:
-        direction = current_matrix
-        i = 0
-        j= 0
-    elif j >1 and i > 1: 
+    elif j > 0 and i > 0: 
         if current_matrix == 'm':
             current_matrix = direction
             i = i-1
@@ -301,9 +294,11 @@ gap = -3
 extend = -6
 
 ##GAP_PENALTIES##
-gap_score_dictionary = {('-','M'): -3.1, ('-','I'):-3.2 , ('-','R'): -3.3, ('-','L'): -3.3, ('-','B'): -3.3, ('-','E'): -2.5,('-','X'): -1.6,('-','H'): -.5} 
+gap_score_dictionary = {('-','M'): -2.8, ('-','I'):-2.1 , ('-','R'): -1.4, ('-','L'): -1.4, ('-','B'): -2.3, ('-','E'): -.5,('-','X'): -1.3,('-','H'): -2.2} 
+#old {('-','M'): -3.1, ('-','I'):-3.2 , ('-','R'): -3.3, ('-','L'): -3.3, ('-','B'): -3.3, ('-','E'): -2.5,('-','X'): -1.6,('-','H'): -.5} 
 
-extend_score_dictionary = {('-','M'): -6.2, ('-','I'): -6.5, ('-','R'): -6.5, ('-','L'): -6.5, ('-','B'): -6.6, ('-','E'): -5,('-','X'): -3.2,('-','H'): -1} 
+extend_score_dictionary = {('-','M'): -5.5, ('-','I'): -4.3, ('-','R'): -2.8, ('-','L'): -2.8, ('-','B'): -4.7, ('-','E'): -1.0,('-','X'): -2.6,('-','H'): -4.3} 
+#old {('-','M'): -6.2, ('-','I'): -6.5, ('-','R'): -6.5, ('-','L'): -6.5, ('-','B'): -6.6, ('-','E'): -5,('-','X'): -3.2,('-','H'): -1} 
 
 ##SCORING_MATRIX##
 score_dictionary = {('M','M'): 4, ('M','I'): -4, ('M','R'): -4, ('M','L'): -4, ('M','B'): -4, ('M','E'): -2,('M','X'): -2,('M','H'): -4, ('I','I'): 2,('I','R'): -5,('I','L'): -5,('I','B'): 0,('I','E'): -2,('I','X'): -2,('I','H'): -4,('R','R'): 6,('R','L'): -8,('R','B'): -5,('R','E'): -4,('R','X'): -2,('R','H'): -4,('L','L'): 6,('L','B'): -5,('L','E'): -4,('L','X'): -2,('L','H'): -4,('B','B'): 2,('B','E'): -2,('B','X'): -2,('B','H'): -4,('E','E'): 2,('E','X'): 0,('E','H'): -4,('X','X'): 2,('X','H'): -4,('H','H'): 4}

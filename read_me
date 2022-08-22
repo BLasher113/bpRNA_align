@@ -4,3 +4,4 @@
 #
 #bpRNA_align_module.py: This module performs the aligning task, once the files are processed and the key information is retreived. This module includes the gap penalties and the substitution matrix for scoring. 
 #
+#an example run file is available, "run_bpRNA_align.sh", and can be run using the following command: "bash run_bpRNA_align.sh"

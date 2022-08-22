@@ -11,26 +11,23 @@ def plot_matrix(middle_matrix, X_matrix, Y_matrix, name_1, name_2):
     X = list(set(np.partition(X_matrix.flatten(), 1)))[1]
     Y = list(set(np.partition(Y_matrix.flatten(), 1)))[1]
     min_range = min(M,X,Y)
-    plt.subplot(1,4,1)
-    plt.imshow(X_matrix, vmin = min_range)
-    plt.xlabel("structure 1")
-    plt.ylabel("structure 2")
-    plt.title("X Matrix")
-    plt.subplot(1,4,2)
-    plt.imshow(middle_matrix, vmin = min_range)
-    plt.xlabel("structure 1")
-    plt.ylabel("structure 2")
-    plt.title("M Matrix")
-    plt.subplot(1,4,3)
-    plt.imshow(Y_matrix, vmin = min_range)
-    plt.xlabel("structure 1")
-    plt.ylabel("structure 2")
-    plt.title("Y Matrix")
-    plt.colorbar(shrink=.3)
-    plt.tight_layout()
+    fig, axes = plt.subplots(ncols=3, sharey=True)
+    axes[0].imshow(X_matrix, vmin = min_range)
+    axes[0].set_xlabel(name_1)
+    axes[0].set_ylabel(name_2)
+    axes[0].set_title("X Matrix")
+    axes[1].imshow(middle_matrix, vmin = min_range)
+    axes[1].set_xlabel(name_1)
+    axes[1].set_title("M Matrix")
+    axes[2].imshow(Y_matrix, vmin = min_range)
+    im = axes[2].imshow(Y_matrix, vmin = min_range)
+    axes[2].set_xlabel(name_1)
+    axes[2].set_title("Y Matrix")
+    clb = fig.colorbar(im, ax=axes.ravel().tolist(), shrink= 0.4)
+    clb.ax.set_title('Score')
     plt.savefig(name_1 + "_" + name_2 + "_alignment_matrices.pdf")
     plt.clf()
-
+       
 def get_struct_info(st_file):
     # Get structure array and db information
     with open(st_file, 'r') as st_info:
@@ -53,7 +50,7 @@ def pair_files(file_list_file):
     pairs = []
     for name_i in files:
         for name_j in files:
-            if (name_j, name_i) not in pairs and (name_i, name_j) not in pairs:
+            if name_j != name_i and (name_j, name_i) not in pairs and (name_i, name_j) not in pairs:
                 pairs.append((name_j, name_i))
     return pairs 
 
@@ -87,16 +84,20 @@ def get_align_results(file_pairs):
             str_1, db_1 = get_struct_info(file_1) 
             str_2, db_2 = get_struct_info(file_2)
             if len(db_1) >= len(db_2):
+                y_label = name_1
+                x_label = name_2
                 align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_1, str_2, db_1, db_2, w)
             elif len(db_2) > len(db_1):
+                y_label = name_2
+                x_label = name_1
                 align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_2, str_1, db_2, db_1, w)
             if plot_matrices == True:
-                plot_matrix(middle_matrix, X_matrix, Y_matrix, name_1, name_2)
+                plot_matrix(middle_matrix, X_matrix, Y_matrix, x_label, y_label)
             
             if show_alignment == True:
-                output.write("\n" + name_1 +"\t" + name_2 + "\t" + align_str_1 + "\t" + align_str_2 + "\t" + str(score))
+                output.write("\n" + y_label +"\t" + x_label + "\t" + align_str_1 + "\t" + align_str_2 + "\t" + str(score))
             elif show_alignment != True:
-                output.write("\n" + name_1 +"\t" + name_2 + "\t" + str(score))
+                output.write("\n" + y_label +"\t" + x_label + "\t" + str(score))
             
 ########
 ##MAIN##
