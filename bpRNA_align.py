@@ -25,7 +25,7 @@ def plot_matrix(middle_matrix, X_matrix, Y_matrix, name_1, name_2):
     axes[2].set_title("Y Matrix")
     clb = fig.colorbar(im, ax=axes.ravel().tolist(), shrink= 0.4)
     clb.ax.set_title('Score')
-    plt.savefig(name_1 + "_" + name_2 + "_alignment_matrices.pdf")
+    plt.savefig(name_1 + "_" + name_2 + "_alignment_matrices.png")
     plt.clf()
        
 def get_struct_info(st_file):
@@ -83,11 +83,11 @@ def get_align_results(file_pairs):
                     print("Incorrect file type used, try dbn or st instead")
             str_1, db_1 = get_struct_info(file_1) 
             str_2, db_2 = get_struct_info(file_2)
-            if len(db_1) >= len(db_2):
+            if len(db_1) <= len(db_2):
                 y_label = name_1
                 x_label = name_2
                 align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_1, str_2, db_1, db_2, w)
-            elif len(db_2) > len(db_1):
+            elif len(db_2) < len(db_1):
                 y_label = name_2
                 x_label = name_1
                 align_str_1, align_str_2, dist, score, X_matrix, Y_matrix, middle_matrix = alignment.score_alignment(str_2, str_1, db_2, db_1, w)

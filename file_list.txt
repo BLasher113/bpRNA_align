@@ -1,2 +1,2 @@
-bpRNA_CRW_8516.st
-bpRNA_CRW_15841.st
+bpRNA_RFAM_1154.st
+bpRNA_PDB_528.st
