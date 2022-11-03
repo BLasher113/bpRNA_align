@@ -1,5 +1,6 @@
 # bpRNA_align
 bpRNA_align is a RNA tool used to identify similarity between RNA structures.
+bpRNA_align is a novel secondary structure alignment method, involving a customized global structural alignment approach. This method utilizes an inverted (gap extend costs more than gap open) and context-specific affine gap penalty along with a structural, feature-specific substitution matrix to provide structural similarity scores. bpRNA-align shows alignment peformace increases over a broad range of structure types.
 
 ## bpRNA-align scripts
 bpRNA_align has two python scripts, one that processees the input files and plots the results, and one that performs the alignment algorithm. 
