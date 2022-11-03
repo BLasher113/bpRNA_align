@@ -21,15 +21,9 @@ def create_matrix(rows, cols, k, ss_1, ss_2, gap, extend):
     middle_matrix_direction = np.full((rows,cols),"m",  dtype="object")
     X_matrix_direction = np.full((rows,cols), "x", dtype="object")
     Y_matrix_direction = np.full((rows,cols),"y", dtype="object")
-    #middle_matrix = np.zeros((rows, cols))
-    #X_matrix = np.zeros((rows, cols))
-    #Y_matrix = np.zeros((rows, cols))
-    middle_matrix = np.ones((rows, cols))*-10000000
-    X_matrix = np.ones((rows, cols))*-10000000
-    Y_matrix = np.ones((rows, cols))*-10000000
-    middle_matrix[0][0]=0
-    X_matrix[0][0]=0
-    Y_matrix[0][0]=0
+    middle_matrix = np.ones((rows, cols))*-1000000
+    X_matrix = np.ones((rows, cols))*-1000000
+    Y_matrix = np.ones((rows, cols))*-1000000
     count = -1
     for i in range(1, k+1):
         middle_matrix_direction[i,0] = 'y'
@@ -56,7 +50,7 @@ def create_matrix(rows, cols, k, ss_1, ss_2, gap, extend):
     X_max = X_matrix[rows-1][cols-1]
     Y_max = Y_matrix[rows-1][cols-1]
     max_list = [[X_max, 'x'],[Y_max,'y'], [middle_max, 'm']]
-    final_score = -1000000
+    final_score = -10000000
     max_matrix = 'w'
     for i in max_list:
         value, matrix = i
@@ -146,7 +140,6 @@ def traceback(middle_matrix, X_matrix, Y_matrix, middle_matrix_direction, X_matr
         else:
             print ('Error:')
             break
-        
         current_matrix, direction, i, j = next_move(middle_matrix_direction, X_matrix_direction, Y_matrix_direction, current_matrix, direction, i, j)
     
     return aligned_seq1, aligned_seq2

@@ -25,7 +25,7 @@ def plot_matrix(middle_matrix, X_matrix, Y_matrix, name_1, name_2):
     axes[2].set_title("Y Matrix")
     clb = fig.colorbar(im, ax=axes.ravel().tolist(), shrink= 0.4)
     clb.ax.set_title('Score')
-    plt.savefig(name_1 + "_" + name_2 + "_alignment_matrices.png")
+    plt.savefig(name_1 + "_" + name_2 + "_alignment_matrices.pdf")
     plt.clf()
        
 def get_struct_info(st_file):
