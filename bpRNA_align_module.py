@@ -31,7 +31,11 @@ def create_matrix(rows, cols, k, ss_1, ss_2, gap, extend):
     X_matrix[0][0]=0
     Y_matrix[0][0]=0
     count = -1
-    for i in range(1, k+1):
+    #print(rows, cols, k)
+    if rows-1 <= k or  cols-1 <= k:
+        k = min(rows-1, cols-1)
+    #print(k)
+    """for i in range(1, k+1):
         middle_matrix_direction[i,0] = 'y'
         X_matrix_direction[i,0] = 'y'
         Y_matrix_direction[i,0] = 'y'
@@ -40,11 +44,21 @@ def create_matrix(rows, cols, k, ss_1, ss_2, gap, extend):
         middle_matrix_direction[0,j] = 'x'
         X_matrix_direction[0,j] = 'x'
         Y_matrix_direction[0,j] = 'x'
-        Y_matrix[0,j] = gap + (j-1)*extend
+        Y_matrix[0,j] = gap + (j-1)*extend"""
+    middle_matrix_direction[:,0] = 'y'
+    middle_matrix_direction[0,:] = 'x'
+    X_matrix_direction[:,0] = 'y'
+    X_matrix_direction[0,:] = 'x'
+    Y_matrix_direction[:,0] = 'y'
+    Y_matrix_direction[0,:] = 'x'
+
     for j in range(1, cols):
+        if j in range(1,k+1):
+            Y_matrix[0,j] = gap + (j-1)*extend
         for d in range(-k, k+1):
             i = int(math.ceil(((float(rows)-1)/(cols-1))*j + d))
             if i >= 1 and i < rows:
+                X_matrix[i,0] = gap + (i-1)*extend
                 score_m, score_x, score_y = calc_score(middle_matrix, X_matrix, Y_matrix, i, j, rows, cols, ss_1, ss_2, extend, k)
                 middle_matrix[i][j] = score_m[0]
                 X_matrix[i][j] = score_x[0]
@@ -57,7 +71,7 @@ def create_matrix(rows, cols, k, ss_1, ss_2, gap, extend):
     Y_max = Y_matrix[rows-1][cols-1]
     max_list = [[X_max, 'x'],[Y_max,'y'], [middle_max, 'm']]
     final_score = -1000000
-    max_matrix = 'w'
+    #max_matrix = 'w'
     for i in max_list:
         value, matrix = i
         if value > final_score:
@@ -204,11 +218,11 @@ def next_move (middle_matrix, X_matrix, Y_matrix, current_matrix, direction, i, 
                 direction = X_matrix[i][j]
     return current_matrix, direction, i, j
 
-def score_alignment(ss_1, ss_2, db_1, db_2, k):
-    ss_1 = edit_ss_array(ss_1, db_1)
-    ss_2 = edit_ss_array(ss_2, db_2)
+def score_alignment(ss_1, ss_2, k):
     rows = len(ss_1) + 1
     cols = len(ss_2) + 1
+    if k > len(ss_1) or k > len(ss_2):
+        k = min(len(ss_1), len(ss_2)) -1
     middle_matrix, X_matrix, Y_matrix, middle_matrix_direction, X_matrix_direction, Y_matrix_direction, max_matrix, final_score  = create_matrix(rows, cols, k, ss_1, ss_2, gap, extend)
     aligned_ss_1, aligned_ss_2  = traceback(middle_matrix, X_matrix, Y_matrix, middle_matrix_direction, X_matrix_direction, Y_matrix_direction, max_matrix, rows, cols, ss_1, ss_2)
     dist = get_dist(aligned_ss_1, aligned_ss_2)
@@ -301,10 +315,11 @@ gap = -3
 extend = -6
 
 ##GAP_PENALTIES##
-gap_score_dictionary = {('-','M'): -2.8, ('-','I'):-2.1 , ('-','R'): -1.4, ('-','L'): -1.4, ('-','B'): -2.3, ('-','E'): -.5,('-','X'): -1.3,('-','H'): -2.2} 
+gap_score_dictionary = {('-','M'): -2.9, ('-','I'):-2.8 , ('-','R'): -2.9, ('-','L'): -2.9, ('-','B'): -2.9, ('-','E'): -.5,('-','X'): -1.7,('-','H'): -1.8} 
 #old {('-','M'): -3.1, ('-','I'):-3.2 , ('-','R'): -3.3, ('-','L'): -3.3, ('-','B'): -3.3, ('-','E'): -2.5,('-','X'): -1.6,('-','H'): -.5} 
 
-extend_score_dictionary = {('-','M'): -5.5, ('-','I'): -4.3, ('-','R'): -2.8, ('-','L'): -2.8, ('-','B'): -4.7, ('-','E'): -1.0,('-','X'): -2.6,('-','H'): -4.3} 
+#oldextend_score_dictionary = {('-','M'): -5.5, ('-','I'): -4.3, ('-','R'): -2.8, ('-','L'): -2.8, ('-','B'): -4.7, ('-','E'): -1.0,('-','X'): -2.6,('-','H'): -4.3} 
+extend_score_dictionary = {('-','M'): -5.7, ('-','I'): -5.6, ('-','R'): -5.8, ('-','L'): -5.8, ('-','B'): -5.8, ('-','E'): -1.0,('-','X'): -3.4,('-','H'): -3.6} 
 #old {('-','M'): -6.2, ('-','I'): -6.5, ('-','R'): -6.5, ('-','L'): -6.5, ('-','B'): -6.6, ('-','E'): -5,('-','X'): -3.2,('-','H'): -1} 
 
 ##SCORING_MATRIX##
