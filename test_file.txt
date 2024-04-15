@@ -1,2 +1,0 @@
-bpRNA_RFAM_1154_2.st
-bpRNA_RFAM_1154.st
