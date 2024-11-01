@@ -1,2 +1,0 @@
-/nfs0/BB/Hendrix_Lab/bpRNA/LocalEnergy/StructureTypes/CRW/StructureType/bpRNA_CRW_55267.st
-/nfs0/BB/Hendrix_Lab/bpRNA/LocalEnergy/StructureTypes/PDB/StructureType/bpRNA_PDB_26.st
