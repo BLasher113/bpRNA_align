@@ -79,8 +79,8 @@ def get_align_results(file_pair):
     output_file = file_pair[3]
     name_1 = file_1.split("/")[-1].split(".")[0]
     name_2 = file_2.split("/")[-1].split(".")[0]
-    type_1 = file_1.split("/")[-1].split(".")[1]
-    type_2 = file_2.split("/")[-1].split(".")[1]
+    type_1 = file_1.split("/")[-1].split(".")[-1]
+    type_2 = file_2.split("/")[-1].split(".")[-1]
     # Check file type and create st file type if given DBN
     if type_1 != "st":
         if type_1 == "dbn" or type_1 == "DBN":
